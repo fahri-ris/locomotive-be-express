@@ -1,6 +1,5 @@
 import { Kafka } from "kafkajs"; // Import Kafka library
 import Mongoose from "mongoose";
-import {DateTime} from "luxon";
 
 class KafkaConfig { // Define a class named KafkaConfig
 
@@ -55,9 +54,6 @@ class KafkaConfig { // Define a class named KafkaConfig
                     }
 
                     const LocomotiveInfo = Mongoose.model('locomotive_info');
-                    // const convertedDate = new Date(value.createdAt * 1000);
-                    // console.log("convertedDate : ", convertedDate);
-                    // console.log("Original Date : ", value.createdAt);
 
                     const dataToSave = new LocomotiveInfo(
                         {
