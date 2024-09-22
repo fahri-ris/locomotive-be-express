@@ -1,7 +1,12 @@
-const express = require('express');
-const mongoose = require("mongoose");
+import express from 'express';
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import KafkaConfig from "./kafkaConfig.js";
+import controllers from "./locomotiveController.js";
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const jsonParser = bodyParser.json();
+const PORT = process.env.PORT || 8081;
 
 // mongodb connection
 mongoose.connect('mongodb://localhost:27017/locomotive');
@@ -12,6 +17,16 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
+// kafka
+const kafkaConfig = new KafkaConfig()
+kafkaConfig.consume('locomotive-info', (value) =>{
+    console.log(value);
+})
+
+// api
+app.post("/api/locomotive/send", jsonParser, controllers.sendMessageToKafka);
+
+// running port
 app.listen(PORT, () =>{
     console.log(`Server is running on port: ${PORT}`);
 })
